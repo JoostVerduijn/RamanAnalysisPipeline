@@ -1,3 +1,6 @@
-## `software_module`
+## `Analysis in R
 
-All of your custom made functions, processing routines, and analysis methods should be given here either as a formal software module or, at a minimum, a single file with enumerated functions that can be directly called. I have not provided an example here as it is highly dependent on the programming language used. 
+In this folder some of the scripts essential for data analysis are deposited.
+
+* "Raman_Analysis_Joost Verduijn_Create database.R" Pulls all .spc files from a folder. Adds them together to one HyperSpec variable "Cell.raw". This is normalized and baseline corrected in "Cell.normalised". This is clustered using k-means clustering and filtered to select only cell specific clusters (normally in the middle of the scan). If the cell specific cluster is <20% or >85% cells are removed. End result is "Cell.normalised_filter" and is saved accordingly
+* 
