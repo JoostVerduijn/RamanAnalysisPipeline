@@ -1,7 +1,8 @@
 ############################################################################################
-#### Composed by Joost Verduijn 15/07/2021                                              ####
-#### Laboratory of Nano-Biotechnology, Department of Biotechnology, Ghent University    ####
-#### Johannes.Verduijn@ugent.be                                                         ####
+#### Composed by Joost Verduijn 01/22/2025                                              ####
+#### Galluzzi Lab                                                                       ####
+#### Cancer Signaling and Microenvironment Program, FCCC, Philadelphia, PA, USA         ####
+#### Johannes.Verduijn@fccc.edu                                                         ####
 ############################################################################################
 
 ##### LOADING #####
@@ -12,7 +13,7 @@ library(e1071)
 library("hyperSpec")
 library(rminer)
 
-assign('All_Raman_data', get(load("%File location comboned HS object%.R"))) #From Raman_Analysis_Joost Verduijn_Create database.R
+assign('All_Raman_data', get(load("%/_GitHub/Joost Verduijn/databases/full_dataset_XX-XX-XX-XXXXXX_full_clustered2.R"))) #From 1) Raman_Analysis_Joost Verduijn_Create database.R
 
 RCDs <- unique(All_Raman_data$RCD)
 ##### BALANCED TS #####
@@ -20,8 +21,9 @@ RCDs <- unique(All_Raman_data$RCD)
 n = 4
 week.label = "Joost Verduijn"
 date.folder<-format(Sys.time(), "%y-%m-%d")
-dir.create(paste0("%File location/",week.label,"/SVM/",date.folder),showWarnings= FALSE)
-setwd(paste0("%File location/",week.label,"/SVM/",date.folder))
+dir.create(paste0("%/_GitHub/",week.label,"/SVM/"),showWarnings= FALSE)
+dir.create(paste0("%/_GitHub/",week.label,"/SVM/",date.folder),showWarnings= FALSE)
+setwd(paste0("%/_GitHub/",week.label,"/SVM/",date.folder))
 all_stats = NULL
 for (k in 1:100) { #100 SVM's creation
   idx = NULL

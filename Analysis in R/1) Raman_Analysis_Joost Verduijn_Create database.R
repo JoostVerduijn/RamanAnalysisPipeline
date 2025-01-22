@@ -1,13 +1,13 @@
 ############################################################################################
-#### Composed by Joost Verduijn 15/07/2021                                              ####
-#### Laboratory of Nano-Biotechnology, Department of Biotechnology, Ghent University    ####
-#### Johannes.Verduijn@ugent.be                                                         ####
+#### Composed by Joost Verduijn 01/22/2025                                              ####
+#### Galluzzi Lab                                                                       ####
+#### Cancer Signaling and Microenvironment Program, FCCC, Philadelphia, PA, USA         ####
+#### Johannes.Verduijn@fccc.edu                                                         ####
 ############################################################################################
 
 # this script creates a dataset starting from .spc files, performs baseline correction,
 # normalisation and double k-means clustering. It also plots the heatmaps, the 
 # results of clustering and the spectra of selected groups of data.
-
 
 # remove old dataset
 rm(list=ls())
@@ -15,25 +15,19 @@ rm(list=ls())
 # set folder where to save data
 week.label = "Joost Verduijn"
 
-
-
 ##### LOAD PACKAGES #####
 library(vegan)
 library("stringr")
 library("hyperSpec") # hyperSpec package
 library("baseline") # Contains all kinds of functions for baseline removal
-#library(MALDIquant)
 library(gridExtra )
 library(hyperSpec.utils)
 library(readxl)
 library(writexl)
 
-
-
 ##### LOAD FILES #####
-setwd("%YOURFOLDER%")
+setwd("%/_GitHub/Raman data") #Set the folder with the Files
 files=list.files(pattern=".spc",recursive = TRUE) #Loads all .spc files from subfolders
-
 
 ##### SET LOADING FUNCTION AND PARAMETERS #####
 xList=sub("x.*", "",sub(".spc","",sub(".*_","",files))) #get x size from file name "File-name_20x25.spc" gives 20
@@ -97,14 +91,12 @@ table(as.factor(sub("_.*","",unique(Cell.normalised$filename))))
 
 ##### SAVE NORMALISED DATASET #####
 date.label = format(Sys.time(), "%y-%m-%d-%H%M%S")   # unique label with date and time
-# folder where to save data
+# folder where to save data 
 
-dir.create(paste0("%YOURFOLDER%/",week.label,"/databases"),showWarnings= FALSE)
-setwd(paste0("%YOURFOLDER%/",week.label,"/databases"))
+dir.create(paste0("%/_GitHub/Raman data",week.label,"/"),showWarnings= FALSE)
+dir.create(paste0("%/_GitHub/Raman data",week.label,"/databases"),showWarnings= FALSE)
+setwd(paste0("%/_GitHub/Raman data",week.label,"/databases"))
 save(Cell.normalised, file = paste0("full_dataset_", date.label, ".R"))
-
-
-
 
 
 ##### CLUSTERING FOR WHOLE DATASET #####
@@ -195,3 +187,4 @@ unique(Cell.normalised_filter$file_spc)
 
 ##### SAVE FILTERED DATASET #####
 save(Cell.normalised_filter, file = paste0("full_dataset_", date.label, "_filtered.R"))
+

@@ -1,21 +1,25 @@
+############################################################################################
+#### Composed by Joost Verduijn 01/22/2025                                              ####
+#### Galluzzi Lab                                                                       ####
+#### Cancer Signaling and Microenvironment Program, FCCC, Philadelphia, PA, USA         ####
+#### Johannes.Verduijn@fccc.edu                                                         ####
+############################################################################################
 
 library(minpack.lm)
 library(nls2)
 library(alsace)
-
 library(hyperSpec)
 library(baseline)
 rm(list=ls())
-assign('All_Raman_data', get(load("C:/Users/Joost Verduijn/OneDrive - UGent/_ Research/RAMAN/Joost/databases/full_dataset_23-05-10-135126_filtered_Removed_Outliers.R")))
+assign('All_Raman_data', get(load("%/_GitHub/Joost Verduijn/databases/full_dataset_XX-XX-XX-XXXXXX_full_clustered2.R")))
 All_Raman_data$cellnumber<-as.numeric(gsub("\\D","",sub("_.*","",sub("-.*","",All_Raman_data$file_spc))))
 
 gaussian <- function(x, amplitude, center, width) {
-  #amplitude * exp(-(x - center)^2 / (2 * width^2)) #gauss?
+
   
-  amplitude * exp(((-4) * log(2) * (x - center)^2) / (width ^ 2)) #gauss? with adjusted width (half max full width)
+  amplitude * exp(((-4) * log(2) * (x - center)^2) / (width ^ 2)) 
 }
 
-# Define the sum of Lorentzian functions
 sum_gaussian <- function(x, params) {
   n_peaks <- length(params) / 3
   result <- rep(0, length(x))
@@ -30,7 +34,7 @@ base_test<-test #Copy metadata
 base_test$spc<-getCorrected(general_ALS_baseline)
 
 presetCenters<-c(717,777,820,851,885,938,1000,1040,1085,1120,1210,1250,1300,1333,1445,1569,1610,1657) #plusminus 10
-
+n_peaks<-length(presetCenters)
 df<-data.frame()
 total_iterations <- 10
 # Preallocate the params_df data frame
@@ -48,7 +52,7 @@ params_df <- data.frame(
   Amplitude_init = numeric(total_iterations * n_peaks),
   Center_init = numeric(total_iterations * n_peaks),
   Width_init = numeric(total_iterations * n_peaks),
-  row.names = character(total_iterations * n_peaks)
+  row.names = NULL
 )
 for (q in 1:length(base_test)){
   x<-base_test@wavelength[]
@@ -65,13 +69,19 @@ for (q in 1:length(base_test)){
   width_peaks<-fwhm_test#[maxima$ymax>0.05]
   center_peaks<-maxima$xmax#[maxima$ymax>0.05]
   height_peaks<-maxima$ymax#[maxima$ymax>0.05]
-  n_peaks <- length(center_peaks)  
+  n_peaks <- length(center_peaks)
+  
+  
+  
   # Generate initial parameters
   init_params <- data.frame(
     amplitude = height_peaks,#runif(n_peaks, 0.5, 2),
     center = center_peaks,#runif(n_peaks, min(x), max(x)),
     width = width_peaks#runif(n_peaks, 15, 60)
   )
+  if (sum(init_params)==Inf){print("Contains a very high peak")}else{
+  
+  
   init_params<-unlist(init_params)
   fit_data <- data.frame(x = x, y = y)
   fit_formula_gaussian <- as.formula(paste("y ~", paste(paste0("gaussian(x, amplitude", 1:n_peaks, ", center", 1:n_peaks, ", width", 1:n_peaks, ")"), collapse = " + ")))
@@ -111,6 +121,7 @@ for (q in 1:length(base_test)){
                           row.names=paste(RCD_type,'counter',q,"peak", 1:n_peaks,sep = '_')) #add an counter for multiple spectra
   df<-rbind(df,params_df)
   print(q)
+  } #From size error
 }
 
 df$Number<-1:dim(df)[1]
@@ -131,7 +142,7 @@ grouped_data <- df %>%
 library(xlsx)
 library(openxlsx)
 
-#xlsx::write.xlsx(df,"test_restricted_presetcentra4.xlsx")
-openxlsx::write.xlsx(x = df, file = "dataframe6.xlsx") #Seems to work better with larger files
-saveRDS(df, file = "FullDataset_V2.Rds")
+
+openxlsx::write.xlsx(x = df, file = "PeakFittedData.xlsx") #Seems to work better with larger files
+saveRDS(df, file = "PeakFittedData_R.Rds")
 

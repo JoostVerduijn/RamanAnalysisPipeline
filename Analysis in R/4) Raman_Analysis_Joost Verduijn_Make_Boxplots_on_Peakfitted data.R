@@ -1,3 +1,9 @@
+############################################################################################
+#### Composed by Joost Verduijn 01/22/2025                                              ####
+#### Galluzzi Lab                                                                       ####
+#### Cancer Signaling and Microenvironment Program, FCCC, Philadelphia, PA, USA         ####
+#### Johannes.Verduijn@fccc.edu                                                         ####
+############################################################################################
 library(minpack.lm)             # Load the minpack.lm package
 library(nls2)
 library(hyperSpec)
@@ -5,7 +11,7 @@ library(baseline)
 rm(list=ls())  
 #Load dataset
 setwd("%Filelocation%")
-df<-readRDS("FullDataset_V8.Rds") #Created by "Raman_Analysis_Joost Verduijn_Peakfit_Gaussians_AtPresetCenters.R"
+df<-readRDS("PeakFittedData_R.Rds") #Created by "3) Raman_Analysis_Joost Verduijn_Peakfit_Gaussians_AtPresetCenters.R"
 
 library(dplyr)
 presetCenters<-c(717,777,820,851,885,938,1000,1040,1085,1120,1210,1250,1300,1333,1445,1569,1610,1657) #plusminus 10
